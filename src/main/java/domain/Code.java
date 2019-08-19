@@ -7,7 +7,7 @@ import java.util.List;
 
 public class Code {
 	
-	private static String FILE_PATH = "C:\\Users\\100904037\\Desktop\\analisadorCod\\src\\main\\java\\src\\Example.java";
+	private static String FILE_PATH = "/home/icaro/Documentos/workspace/extra/analisadorCod/src/main/java/src/Example.java";
 
 	private static Integer linesCode = 0;
 	private static Integer classCount = 0;
@@ -30,7 +30,7 @@ public class Code {
 				}
 			}
 			br.close();
-			System.out.println("Linhas de código: " + linesCode);
+			System.out.println("Linhas de codigo: " + linesCode);
 			System.out.println("Classes: " + classCount);
 		} catch (IOException ioe) {
 			ioe.printStackTrace();
