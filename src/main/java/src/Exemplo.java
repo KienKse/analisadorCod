@@ -3,7 +3,7 @@ package src.main.java.src;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 
-public class Example {
+public class Exemplo {
 
 	private static String regexMethod = "(public static void|private static void|protected static void).*";
 

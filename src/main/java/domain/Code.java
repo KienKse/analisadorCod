@@ -1,18 +1,19 @@
-package domain;
+package src.main.java.domain;
 
-import java.io.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+
+import src.main.java.src.Exemplo;
 
 public class Code {
 	
-	private static String FILE_PATH = "/home/icaro/Documentos/workspace/extra/analisadorCod/src/main/java/src/Example.java";
+	private static final String FILE_PATH = "";
 
 	private static Integer linesCode = 0;
 	private static Integer classCount = 0;
-	private static String regex = "(public class|private class|protected class).*";
-	
+	private static String regexClass = "(public class|private class|protected class).*";
+
 	public static void main(String[] args) {
 		count();
 	}
@@ -23,18 +24,22 @@ public class Code {
 			while (br.ready()) {
 				linesCode++;
 				String linha = br.readLine();
-				System.out.println(linha);
-				
-				if(linha.matches(regex)) {
+				if(linha.matches(regexClass)) {
 					classCount++;
 				}
 			}
 			br.close();
 			System.out.println("Linhas de codigo: " + linesCode);
 			System.out.println("Classes: " + classCount);
+			contarMetodos();
 		} catch (IOException ioe) {
 			ioe.printStackTrace();
 		}
 	}
-	
+
+	private static void contarMetodos() {
+		Class<Exemplo> classe = Exemplo.class;
+		System.out.println("Metodos: " + classe.getDeclaredMethods().length);
+	}
+
 }
