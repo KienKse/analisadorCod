@@ -1,45 +1,64 @@
 package src.main.java.domain;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
-import src.main.java.src.Exemplo;
+import javax.swing.JOptionPane;
 
 public class Code {
-	
-	private static final String FILE_PATH = "";
+	private static String path = "";
 
 	private static Integer linesCode = 0;
 	private static Integer classCount = 0;
+	private static Integer methodCount = 0;
 	private static String regexClass = "(public class|private class|protected class).*";
+//	public static final String class2 = "(.*class)* [A-Z].* [{]";
+	public static final String PATTERMETHOD = "(.(public|private|protected)* [A-Z].* [(].* [{].*";
 
 	public static void main(String[] args) {
-		count();
+		try {
+			path = JOptionPane.showInputDialog("Digite o caminho completo do path do arquivo:");
+			metodoPrincipal();
+		} catch (NullPointerException e) {
+			String message = "Nullpointer -> Path de arquivo inválido";
+			JOptionPane.showMessageDialog(null,message);;
+//			System.err.println(message);
+		}
 	}
 
-	private static void count() {
+	private static void metodoPrincipal() {
 		try {
-			BufferedReader br = new BufferedReader(new FileReader(FILE_PATH));
-			while (br.ready()) {
-				linesCode++;
-				String linha = br.readLine();
-				if(linha.matches(regexClass)) {
-					classCount++;
-				}
-			}
-			br.close();
+			executarAnalise();
 			System.out.println("Linhas de codigo: " + linesCode);
 			System.out.println("Classes: " + classCount);
-			contarMetodos();
+			System.out.println("Metodos: " + methodCount);
 		} catch (IOException ioe) {
 			ioe.printStackTrace();
 		}
 	}
 
-	private static void contarMetodos() {
-		Class<Exemplo> classe = Exemplo.class;
-		System.out.println("Metodos: " + classe.getDeclaredMethods().length);
+	private static void executarAnalise() throws FileNotFoundException, IOException {
+		BufferedReader br = new BufferedReader(new FileReader(path));
+		while (br.ready()) {
+			linesCode++;
+			String linha = br.readLine();
+			verificarClasses(linha);
+			veriricarMetodos(linha);
+		}
+		br.close();
 	}
 
+	private static void verificarClasses(String linha) {
+		if(linha.matches(regexClass)) {
+			classCount++;
+		}
+	}
+
+	private static void veriricarMetodos(String linha) {
+		if(linha.matches(PATTERMETHOD)) {
+			methodCount++;
+		}
+	}
 }

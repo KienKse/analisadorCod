@@ -29,6 +29,8 @@ public class Exemplo {
 
 	protected static void metodo2(String teste1) {
 		// Method Body
+		System.out.println("public class");
+		System.out.println("private class void teste { oi mãe }");
 	}
 
 	public BigDecimal metodo1() {
