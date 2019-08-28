@@ -8,21 +8,24 @@ import java.io.IOException;
 import javax.swing.JOptionPane;
 
 public class Code {
-	private static String path = "";
-
+	
+	private static String path = "C:\\Users\\kiens\\eclipse-workspace\\analisadorCod\\src\\main\\java\\src\\Exemplo.java";
+//	private static String path = "";
+//	private static final String whiteSpace = "";
+	//TODO: fix method
+	private static final String regexMethod = "(public|private|protected).*(static|void|String|int|long|float|boolean|double|char|Bitmap|BigDecimal|Double|Long|Float).*(\\()*(\\{)";
+	private static final String regexClass = "(public|private|protected).*(class).*(\\()*(\\{)";
+	
 	private static Integer linesCode = 0;
 	private static Integer classCount = 0;
 	private static Integer methodCount = 0;
-	private static String regexClass = "(public class|private class|protected class).*";
-//	public static final String class2 = "(.*class)* [A-Z].* [{]";
-	public static final String PATTERMETHOD = "(.(public|private|protected)* [A-Z].* [(].* [{].*";
 
 	public static void main(String[] args) {
 		try {
-			path = JOptionPane.showInputDialog("Digite o caminho completo do path do arquivo:");
+//			path = JOptionPane.showInputDialog("Digite o caminho completo do path do arquivo:");
 			metodoPrincipal();
 		} catch (NullPointerException e) {
-			String message = "Nullpointer -> Path de arquivo inválido";
+			String message = "Nullpointer -> Path de arquivo invalido";
 			JOptionPane.showMessageDialog(null,message);;
 //			System.err.println(message);
 		}
@@ -44,10 +47,18 @@ public class Code {
 		while (br.ready()) {
 			linesCode++;
 			String linha = br.readLine();
+			verificarWhiteSpaces(linha);
 			verificarClasses(linha);
 			veriricarMetodos(linha);
 		}
 		br.close();
+	}
+
+	private static void verificarWhiteSpaces(String linha) {
+		if(linha.equals("") || linha.equals("	") || linha.equals("	 ") || linha.equals(" ") || linha.equals("	  ") || linha.equals("		") || linha.equals("			") || linha.equals("				")) {
+//		if(linha.matches(whiteSpace)) {
+			linesCode--;
+		}
 	}
 
 	private static void verificarClasses(String linha) {
@@ -57,7 +68,7 @@ public class Code {
 	}
 
 	private static void veriricarMetodos(String linha) {
-		if(linha.matches(PATTERMETHOD)) {
+		if(linha.matches(regexMethod)) {
 			methodCount++;
 		}
 	}
