@@ -11,7 +11,7 @@ public class Code {
 	
 	private static String path = "C:\\Users\\kiens\\eclipse-workspace\\analisadorCod\\src\\main\\java\\src\\Exemplo.java";
 //	private static String path = "";
-//	private static final String whiteSpace = "";
+	private static final String line = ".*(\s)";
 	//TODO: fix method
 	private static final String regexMethod = "(public|private|protected).*(static|void|String|int|long|float|boolean|double|char|Bitmap|BigDecimal|Double|Long|Float).*(\\()*(\\{)";
 	private static final String regexClass = "(public|private|protected).*(class).*(\\()*(\\{)";
@@ -45,19 +45,17 @@ public class Code {
 	private static void executarAnalise() throws FileNotFoundException, IOException {
 		BufferedReader br = new BufferedReader(new FileReader(path));
 		while (br.ready()) {
-			linesCode++;
 			String linha = br.readLine();
-			verificarWhiteSpaces(linha);
+			verificarLinha(linha);
 			verificarClasses(linha);
 			veriricarMetodos(linha);
 		}
 		br.close();
 	}
-
-	private static void verificarWhiteSpaces(String linha) {
-		if(linha.equals("") || linha.equals("	") || linha.equals("	 ") || linha.equals(" ") || linha.equals("	  ") || linha.equals("		") || linha.equals("			") || linha.equals("				")) {
-//		if(linha.matches(whiteSpace)) {
-			linesCode--;
+	
+	private static void verificarLinha(String linha) {
+		if(linha.matches(linha)) {
+			linesCode++;
 		}
 	}
 
