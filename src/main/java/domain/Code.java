@@ -11,7 +11,7 @@ public class Code {
 	
 	private static String path = "C:\\Users\\kiens\\eclipse-workspace\\analisadorCod\\src\\main\\java\\src\\Exemplo.java";
 //	private static String path = "";
-	private static final String line = ".*(\s)";
+	private static final String line = ".*(\\S)";
 	//TODO: fix method
 	private static final String regexMethod = "(public|private|protected).*(static|void|String|int|long|float|boolean|double|char|Bitmap|BigDecimal|Double|Long|Float).*(\\()*(\\{)";
 	private static final String regexClass = "(public|private|protected).*(class).*(\\()*(\\{)";
@@ -54,7 +54,7 @@ public class Code {
 	}
 	
 	private static void verificarLinha(String linha) {
-		if(linha.matches(linha)) {
+		if(linha.matches(line)) {
 			linesCode++;
 		}
 	}
