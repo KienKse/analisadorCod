@@ -1,13 +1,11 @@
 package src.main.java.src;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.ArrayList;
 public class Exemplo {
 
 	public static void main(String[] args) {
-		
 		System.out.println("Ola, Mundo!");
-		System.out.println("xprotected class {private String x;} private class {private String x;}");
-		System.out.println(" protected class {private String x;} private class {private String x;}");
 		
 		/** metodo2 e metodo4 => contexto static */
 		metodo2("teste1");
@@ -27,10 +25,14 @@ public class Exemplo {
 	protected static void metodo2(String teste1) {
 		// Method Body
 		System.out.println("public class");
-		System.out.println("private class void teste { oi m�e }");
 	}
 	
 	public BigDecimal metodo1() {
+		// Method Body
+		return null;
+	}
+	
+	public BigInteger metodo2() {
 		// Method Body
 		return null;
 	}
