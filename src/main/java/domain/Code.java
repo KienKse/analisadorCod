@@ -16,36 +16,12 @@ public class Code {
 	private static final String line = ".*(\\S)";
 	private static final String regexMethod = "(public|private|protected).*(static|void|String|int|long|float|boolean|double|char|Bitmap|BigDecimal|BigInteger|Double|Long|Float).*(\\()*(\\{)";
 	private static final String regexClass = "(public|private|protected).*(class).*(\\()*(\\{)";
+
 	private static Integer linesCode = 0;
 	private static Integer classCount = 0;
 	private static Integer methodCount = 0;
 
-	public static void main(String[] args) {
-		try {
-			path = JOptionPane.showInputDialog("Digite o caminho completo do path do arquivo:");
-			metodoPrincipal();
-		} catch (NullPointerException e) {
-			String message = "Nullpointer -> Path de arquivo invalido";
-			JOptionPane.showMessageDialog(null,message);;
-//			System.err.println(message);
-		}
-	}
-
-	private static void metodoPrincipal() {
-		try {
-			executarAnalise();
-			JOptionPane.showMessageDialog(null, "Linhas de codigo: " + linesCode + "\n"
-					+ "Classes: " + classCount + "\n"
-					+ "Metodos: " + methodCount);
-//			System.out.println("Linhas de codigo: " + linesCode);
-//			System.out.println("Classes: " + classCount);
-//			System.out.println("Metodos: " + methodCount);
-		} catch (IOException ioe) {
-			ioe.printStackTrace();
-		}
-	}
-
-	private static void executarAnalise() throws FileNotFoundException, IOException {
+	public void executarAnalise(String path) throws FileNotFoundException, IOException {
 		BufferedReader br = new BufferedReader(new FileReader(path));
 		while (br.ready()) {
 			String linha = br.readLine();
@@ -54,8 +30,20 @@ public class Code {
 			veriricarMetodos(linha);
 		}
 		br.close();
+		imprimirMetricas();
 	}
 	
+	private void imprimirMetricas() {
+		System.out.println("Métricas:\n"
+				+ "LOC: " + linesCode + "\n"
+				+ "Número de classes: " + classCount  + "\n"
+				+ "Múmero de Métodos: " + methodCount + "\n");
+		
+		linesCode = 0;
+		classCount = 0;
+		methodCount = 0;
+	}
+
 	private static void verificarLinha(String linha) {
 		if(linha.matches(line)) {
 			linesCode++;

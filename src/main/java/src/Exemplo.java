@@ -14,6 +14,12 @@ public class Exemplo {
 		/** metodo 1 e 3 => nonstatic*/
 	}
 	
+	public static class OutraClasse {
+		public static void main(String[] args) {
+			System.out.println("xablau");
+		}
+	}
+	
 	public static void metodo4(String nome, boolean objects, Long number) {
 		// Method Body
 	}
