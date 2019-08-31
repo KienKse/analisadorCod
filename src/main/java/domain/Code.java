@@ -11,8 +11,6 @@ import javax.swing.JOptionPane;
 
 public class Code {
 	
-//	private static String path = "C:\\Users\\kiens\\eclipse-workspace\\analisadorCod\\src\\main\\java\\src\\Exemplo.java";
-	private static String path = "";
 	private static final String line = ".*(\\S)";
 	private static final String regexMethod = "(public|private|protected).*(static|void|String|int|long|float|boolean|double|char|Bitmap|BigDecimal|BigInteger|Double|Long|Float).*(\\()*(\\{)";
 	private static final String regexClass = "(public|private|protected).*(class).*(\\()*(\\{)";
@@ -26,7 +24,7 @@ public class Code {
 		while (br.ready()) {
 			String linha = br.readLine();
 			verificarLinha(linha);
-			verificarClasses(linha);
+			veriricarClasses(linha);
 			veriricarMetodos(linha);
 		}
 		br.close();
@@ -50,17 +48,21 @@ public class Code {
 		}
 	}
 
-	private static void verificarClasses(String linha) {
-		if(linha.matches(regexClass)) {
-			classCount++;
-		}
-	}
-
 	private static void veriricarMetodos(String linha) {
 		Pattern pattern = Pattern.compile(regexMethod);
         Matcher matcher = pattern.matcher(linha);
 		if(matcher.find()) {
 			methodCount++;
 		}
+	}
+	
+	
+	private static void veriricarClasses(String linha) {
+        Pattern pattern = Pattern.compile(regexClass);
+        Matcher matcher = pattern.matcher(linha);
+        
+        while (matcher.find()) {
+        	classCount++;
+        }
 	}
 }

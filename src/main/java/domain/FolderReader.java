@@ -10,7 +10,7 @@ import javax.swing.JOptionPane;
 
 public class FolderReader {
 
-//	private static String pathname = "";
+//	private static String pathname = "C:\\Users\\100904037\\Desktop\\Dataset\\1";
 
 	public static void main(String[] args) {
 		try {
