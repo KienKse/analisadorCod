@@ -32,10 +32,10 @@ public class Code {
 	}
 	
 	private void imprimirMetricas() {
-		System.out.println("Métricas:\n"
+		System.out.println("MÃ©tricas:\n"
 				+ "LOC: " + linesCode + "\n"
-				+ "Número de classes: " + classCount  + "\n"
-				+ "Múmero de Métodos: " + methodCount + "\n");
+				+ "NÃºmero de classes: " + classCount  + "\n"
+				+ "MÃºmero de MÃ©todos: " + methodCount + "\n");
 		
 		linesCode = 0;
 		classCount = 0;
@@ -64,5 +64,37 @@ public class Code {
         while (matcher.find()) {
         	classCount++;
         }
+		
+		/**
+			List<List<String>> dadosAnalisados = Arrays.asList(
+			//exampleList
+			    Arrays.asList("Jean", "author", "Java"),
+			    Arrays.asList("David", "editor", "Python"),
+			    Arrays.asList("Scott", "editor", "Node.js")
+			    //adicionar dados da analise das pastas
+			);
+
+			FileWriter writer = new FileWriter("analisdorCod.csv");
+			writer.append("MÃŠS");
+			writer.append("|");
+			writer.append("LOC");
+			writer.append("|");
+			writer.append("CLASSES");
+			writer.append("|");
+			writer.append("MÃ‰TODOS");
+			writer.append("|");
+			writer.append("CLASSE DEUS");
+			writer.append("|");
+			writer.append("MÃ‰TODO DEUS");
+			writer.append("\n");
+
+			for (List<String> rowData : dadosAnalisados) {
+			    writer.append(String.join("|", rowData));
+			    writer.append("\n");
+			}
+
+			writer.flush();
+			writer.close();
+		*/
 	}
 }
