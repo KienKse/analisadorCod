@@ -1,4 +1,4 @@
-package src.main.java.src;
+package usage;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -7,6 +7,8 @@ public class Exemplo {
 	public static void main(String[] args) {
 		System.out.println("Ola, Mundo!");
 		
+	    //pegarNomeArquivo//System.out.println(f.getAbsolutePath().substring(f.getAbsolutePath().lastIndexOf("\\")+1));
+	    		
 		/** metodo2 e metodo4 => contexto static */
 		metodo2("teste1");
 		metodo4(null, true, 1234567890L);
