@@ -73,7 +73,7 @@ public class Code {
 
 	private static void verificarLinha(String linha) {
 		if(linha.matches(line)) {
-			verificarMetodoDeus(linha, "Metodo Deus", 127);
+			//verificarMetodoDeus(linha, "Metodo Deus", 127);
 			//verificarClasseDeus(linha, "Classe Deus", 800);
 			linhasCodigo++;
 		}
@@ -81,8 +81,8 @@ public class Code {
 
 	private static void veriricarMetodos(String linha) {
 		Pattern pattern = Pattern.compile(regexMethod);
-        Matcher matcher = pattern.matcher(linha);
-		if(matcher.find()) {
+        	Matcher matcher = pattern.matcher(linha);
+		while (matcher.find()) {
 			contadorMetodo++;
 		}
 	}
@@ -110,12 +110,12 @@ public class Code {
 	}
 
 	private static void veriricarClasses(String linha) {
-        Pattern pattern = Pattern.compile(regexClass);
-        Matcher matcher = pattern.matcher(linha);
-        
-        while (matcher.find()) {
-        	contadorClasse++;
-        }	
+		Pattern pattern = Pattern.compile(regexClass);
+		Matcher matcher = pattern.matcher(linha);
+
+		while (matcher.find()) {
+			contadorClasse++;
+		}	
 	}
 
 	
