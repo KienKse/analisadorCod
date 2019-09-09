@@ -49,7 +49,7 @@ public class FolderReader {
 			}
 		});
 
-		System.out.println("Direterio:\n" + dir.getAbsolutePath());
+		System.out.println("Diretorio:\n" + dir.getAbsolutePath());
 		System.out.println("______________________________________");
 		listFile(dir);
 
@@ -85,9 +85,8 @@ public class FolderReader {
 			escritor = extrairEscritor();
 	
 			for (List<String> dados : dadosAnalisados) {
-			    escritor.append(String.join("|", dados));
+			    escritor.append(String.join(";", dados));
 			}
-	
 			escritor.flush();
 			escritor.close();
 		} catch (IOException e) {
@@ -100,17 +99,7 @@ public class FolderReader {
 	private static FileWriter extrairEscritorCompleto() throws IOException {
 		FileWriter escritor;
 		escritor = new FileWriter("analisdorCod.csv");
-		escritor.append("Mes");
-		escritor.append("|");
-		escritor.append("LOC");
-		escritor.append("|");
-		escritor.append("CLASSES");
-		escritor.append("|");
-		escritor.append("METODOS");
-		escritor.append("|");
-		escritor.append("CLASSE DEUS");
-		escritor.append("|");
-		escritor.append("METODO DEUS");
+		escritor.append("Mes;LOC;CLASSES;CLASSES;CLASSE DEUS;METODO DEUS");
 		escritor.append("\n");
 		return escritor;
 	}
@@ -121,13 +110,13 @@ public class FolderReader {
 		FileWriter escritor;
 		escritor = new FileWriter("analisdorCodComNome.csv");
 		escritor.append("Mes");
-		escritor.append("|");
+		escritor.append(";");
 		escritor.append("Arquivo");
-		escritor.append("|");
+		escritor.append(";");
 		escritor.append("LOC");
-		escritor.append("|");
+		escritor.append(";");
 		escritor.append("CLASSES");
-		escritor.append("|");
+		escritor.append(";");
 		escritor.append("METODOS");
 		escritor.append("\n");
 		return escritor;
