@@ -6,6 +6,8 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.swing.JFileChooser;
@@ -13,7 +15,7 @@ import javax.swing.JOptionPane;
 
 public class FolderReader {
 	
-	private static List<List<String>> dadosAnalisados = new ArrayList<List<String>>();
+	private static List<Metrica> dadosAnalisados = new ArrayList<Metrica>();
 
 //	private static String pathname = "C:\\Users\\100904037\\Desktop\\Dataset\\1";
 
@@ -27,8 +29,8 @@ public class FolderReader {
 			if(returnVal == JFileChooser.APPROVE_OPTION) {
 //				pathname = JOptionPane.showInputDialog("Digite o caminho completo da pasta:");
 //			    FolderReader.listFolders(new File(pathname));
-			    File yourFolder = jFileChooser.getSelectedFile();
-			    FolderReader.listarPastas(new File(yourFolder.getPath()));
+			    File pasta = jFileChooser.getSelectedFile();
+			    FolderReader.listarPastas(new File(pasta.getPath()));
 			    gerarCSV();
 			}
 		} catch (NullPointerException e) {
@@ -50,6 +52,7 @@ public class FolderReader {
 		});
 
 		System.out.println("Diretorio:\n" + dir.getAbsolutePath());
+		System.out.println("Nome da pasta: " + dir.getName());
 		System.out.println("______________________________________");
 		listFile(dir);
 
@@ -69,6 +72,7 @@ public class FolderReader {
 				try {
 //					code.executarAnalise(file.getAbsolutePath().replaceAll("\\\\", "\\\\\\\\"));
 					dadosAnalisados.add(code.executarAnalise(arquivo.getAbsolutePath()));
+					ordenarMetricasPeloMes(dadosAnalisados);
 				} catch (FileNotFoundException e) {
 					System.out.println("Nao e possivel acessar a pasta por falta de privilegios.");
 //					e.printStackTrace();
@@ -79,13 +83,24 @@ public class FolderReader {
 		}
 	}
 	
+	private static void ordenarMetricasPeloMes(List<Metrica> metricas) {
+		Collections.sort(metricas, new Comparator<Metrica>() {
+		@Override
+		public int compare(Metrica objeto1, Metrica objeto2) {
+			return objeto1.getPasta().compareTo(objeto2.getPasta());
+		}
+		});
+
+	}
+	
 	private static void gerarCSV() {
 		FileWriter escritor;
 		try {
 			escritor = extrairEscritor();
 	
-			for (List<String> dados : dadosAnalisados) {
-			    escritor.append(String.join(";", dados));
+			for (Metrica dados : dadosAnalisados) {
+				//TODO: JUNTAR COM CLASSE METRICA
+			    //escritor.append(String.join(";", dados.get));
 			}
 			escritor.flush();
 			escritor.close();

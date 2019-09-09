@@ -23,7 +23,7 @@ public class Code {
 	private static Integer contadorMetodoDeus = 0;
 	private static Integer contadorClasseDeus = 0;
 
-	public List<String> executarAnalise(String caminho) throws FileNotFoundException, IOException {
+	public Metrica executarAnalise(String caminho) throws FileNotFoundException, IOException {
 		BufferedReader br = new BufferedReader(new FileReader(caminho));
 		while (br.ready()) {
 			String linha = br.readLine();
@@ -34,18 +34,17 @@ public class Code {
 		br.close();
 		imprimirMetricas();
 		
-		String mesArquivoT, arquivo, linhasCodigoT, contadorClasseT, contadorMetodoT;
+		String mesArquivoT, arquivo;
 		
-		linhasCodigoT = linhasCodigo+"";
-		contadorClasseT = contadorClasse+"";
-		contadorMetodoT = contadorMetodo+"";
 		mesArquivoT = capturarMesArquivoPeloCaminho(caminho);
 		arquivo = caminho.substring(caminho.lastIndexOf("\\")+1);
 		
-		
 		linhasCodigo = contadorClasse = contadorMetodo = 0;
 		
-		return Arrays.asList(mesArquivoT, arquivo, linhasCodigoT, contadorClasseT, contadorMetodoT, "\n");
+		Metrica metrica = new Metrica(mesArquivoT, arquivo, linhasCodigo, contadorClasse, contadorMetodo);
+		
+		return metrica;
+		//return Arrays.asList(mesArquivoT, arquivo, linhasCodigoT, contadorClasseT, contadorMetodoT, "\n");
 //		return Arrays.asList(mesArquivoT, linhasCodigoT, contadorClasseT, contadorMetodoT, "\n");
 	}
 
