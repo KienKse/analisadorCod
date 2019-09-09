@@ -1,31 +1,31 @@
-package domain;
-
-import java.util.Arrays;
+package model;
 
 public class Metrica {
 	
 	
 	private String arquivo;
-	private String pasta;
+	private Integer pasta;
 	private Integer loc;
 	private Integer metodos;
 	private Integer classes;
 	private Integer metodoDeus;
 	private Integer classeDeus;
 	
-	public Metrica(String arquivo, String pasta) {
+	public Metrica(String arquivo, Integer pasta) {
 		this.arquivo = arquivo;
 		this.pasta = pasta;
 	}
 	
 	// mesArquivoT, arquivo, linhasCodigoT, contadorClasseT, contadorMetodoT
 	
-	public Metrica(String pasta, String arquivo, int loc, int classes, int metodos) {
+	public Metrica(Integer pasta, String arquivo, int loc, int classes, int metodos, int classeDeus, int metodoDeus) {
 		this.arquivo = arquivo;
 		this.pasta = pasta;
 		this.loc = loc;
 		this.classes = classes;
 		this.metodos = metodos;
+		this.classeDeus = classeDeus;
+		this.metodoDeus = metodoDeus;
 	}
 	
 	public String getArquivo() {
@@ -34,10 +34,10 @@ public class Metrica {
 	public void setArquivo(String arquivo) {
 		this.arquivo = arquivo;
 	}
-	public String getPasta() {
+	public Integer getPasta() {
 		return pasta;
 	}
-	public void setPasta(String pasta) {
+	public void setPasta(Integer pasta) {
 		this.pasta = pasta;
 	}
 	public Integer getLoc() {
