@@ -72,7 +72,7 @@ public class Code {
 	private static void veriricarMetodos(String linha) {
 		Pattern pattern = Pattern.compile(regexMethod);
         Matcher matcher = pattern.matcher(linha);
-		if(matcher.find()) {
+		while (matcher.find()) {
 			contadorMetodo++;
 		}
 	}
