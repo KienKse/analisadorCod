@@ -13,6 +13,14 @@ public class Mensal {
 	private Integer classesDeusTotal = 0;
 	private Integer metodosDeusTotal = 0;
 	
+	public Mensal(Integer mes) {
+		this.mes = mes;
+	}
+	
+	public Mensal() {
+		// TODO Auto-generated constructor stub
+	}
+
 	public List<Metrica> getMetricas() {
 		if(metricas == null) {
 			metricas = new ArrayList<Metrica>();

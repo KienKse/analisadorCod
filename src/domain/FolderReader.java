@@ -27,6 +27,7 @@ public class FolderReader {
 			new FolderReader();
 			JFileChooser jFileChooser = new JFileChooser();
 			jFileChooser.setCurrentDirectory(new java.io.File("."));
+//			jFileChooser.setCurrentDirectory(new java.io.File("C:\\Users\\kiens\\Desktop\\Dataset"));
 			jFileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 			int returnVal = jFileChooser.showOpenDialog(jFileChooser);
 			if(returnVal == JFileChooser.APPROVE_OPTION) {
@@ -52,14 +53,10 @@ private static void gerarMetricaGeral() {
 			mensal.setMes(metrica.getPasta());
 			mensal.getMetricas().add(metrica);
 		} else {
-			mes++;
+			mes = metrica.getPasta();
 			mensais.add(mensal);
-			mensal = new Mensal();
+			mensal = new Mensal(metrica.getPasta());
 			mensal.getMetricas().add(metrica);
-		}
-		if((dadosAnalisados.size()-1) == dadosAnalisados.indexOf(metrica)) {
-			mensal.setMes(metrica.getPasta());
-			mensais.add(mensal);
 		}
 	}
 }
@@ -101,7 +98,7 @@ private static void gerarMetricaGeral() {
 			}
 		}
 	}
-	
+
 	private static void ordenarMetricasPeloMes(List<Metrica> metricas) {
 		Collections.sort(metricas, new Comparator<Metrica>() {
 		@Override
@@ -115,15 +112,6 @@ private static void gerarMetricaGeral() {
 		FileWriter escritor;
 		try {
 			escritor = extrairEscritor();
-	
-//			List<String> data = new ArrayList<String>();
-//			for (Metrica metrica: dadosAnalisados) {
-//				data.add(metrica.getPasta()+"");
-//				data.add(metrica.getArquivo());
-//				data.add(metrica.getLoc()+"");
-//				data.add(metrica.getClasses()+"");
-//				data.add(metrica.getMetodos()+"");
-//			}
 			
 			for (Metrica metrica: dadosAnalisados) {
 				List<String> dados = new ArrayList<String>(Arrays.asList(
@@ -148,7 +136,7 @@ private static void gerarMetricaGeral() {
 		try {
 //			Mes;LOC;CLASSES;METODOS;CLASSE DEUS;METODO DEUS
 			escritor = extrairEscritorCompleto();
-
+			
 			for (Mensal mensal: mensais) {
 				List<String> data = new ArrayList<String>(Arrays.asList(
 					mensal.getMes()+"",

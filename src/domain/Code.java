@@ -21,6 +21,7 @@ public class Code {
 	private static Integer contadorMetodo = 0;
 	
 	private static Integer chavesAbertas = 0;
+	private static Integer chavesAbertasClasse = 0;
 	
 	private static Integer contadorMetodoDeus = 0;
 	private static Integer contadorClasseDeus = 0;
@@ -30,8 +31,8 @@ public class Code {
 		while (br.ready()) {
 			String linha = br.readLine();
 			verificarLinha(linha);
-			veriricarClasses(linha);
-			veriricarMetodos(linha);
+//			veriricarClasses(linha);
+//			veriricarMetodos(linha);
 		}
 		br.close();
 		imprimirMetricas();
@@ -40,8 +41,8 @@ public class Code {
 		String arquivo;
 		
 		mesArquivoT = capturarMesArquivoPeloCaminho(caminho);
-//		arquivo = caminho.substring(caminho.lastIndexOf("\\")+1);
-		arquivo = caminho.substring(caminho.lastIndexOf("/")+1);
+		arquivo = caminho.substring(caminho.lastIndexOf("\\")+1);
+//		arquivo = caminho.substring(caminho.lastIndexOf("/")+1);
 			
 		Metrica metrica = new Metrica(mesArquivoT, arquivo, linhasCodigo, contadorClasse, contadorMetodo, contadorClasseDeus, contadorMetodoDeus);
 
@@ -54,8 +55,8 @@ public class Code {
 
 	private Integer capturarMesArquivoPeloCaminho(String caminho) {
 		Integer mes = null;
-//		for (String string : caminho.split("\\\\")) {
-		for (String string : caminho.split("/")) {
+		for (String string : caminho.split("\\\\")) {
+//		for (String string : caminho.split("/")) {
 	    	try {
 	    		mes = Integer.parseInt(string);
 	    	} catch (NumberFormatException e) {
@@ -72,55 +73,66 @@ public class Code {
 				+ "Numero de Metodos: " + contadorMetodo + "\n"
 				+ "Numero de Metodos Deus: " + contadorMetodoDeus + "\n"
 				+ "Numero de Classes Deus: " + contadorClasseDeus + "\n");
-		System.out.println("Chaves: " + chavesAbertas);
 	}
 
 	private static void verificarLinha(String linha) {
 		if(linha.matches(line)) {
-			//verificarMetodoDeus(linha, "Metodo Deus", 127);
-			//verificarClasseDeus(linha, "Classe Deus", 800);
+			verificarMetodoDeus(linha, 127);
+			verificarClasseDeus(linha, 800);
 			linhasCodigo++;
 		}
 	}
 
-	private static void veriricarMetodos(String linha) {
+	private static boolean veriricarMetodos(String linha) {
+		boolean metodo = false;
 		Pattern pattern = Pattern.compile(regexMethod);
-        	Matcher matcher = pattern.matcher(linha);
+    	Matcher matcher = pattern.matcher(linha);
 		while (matcher.find()) {
+			metodo = true;
 			contadorMetodo++;
 		}
-	}
-	
-	
-	private static void verificarMetodoDeus(String linhaCodigo, String vericacao, int limite) {
-		//TODO CONTINUAR METODO DEUS E APOS CLASSE VERIFY
-		chavesAbertas++;
-		contadorMetodo++;
-		//todo: FIX count error
-		if(linhaCodigo.matches(".*(\\{)")) {
-			if(contadorMetodo >= limite) {
-				contadorMetodoDeus++;
-				contadorMetodo = 0;
-			}
-			
-			if(linhaCodigo.matches("(\\})")) {
-				chavesAbertas--;
-			}
-		}
-		
-		if(linhaCodigo.matches("(\\})")) {
-			chavesAbertas--;
-		}
+		return metodo;
 	}
 
-	private static void veriricarClasses(String linha) {
+	private static boolean veriricarClasses(String linha) {
+		boolean classe = false;
 		Pattern pattern = Pattern.compile(regexClass);
 		Matcher matcher = pattern.matcher(linha);
 
 		while (matcher.find()) {
+			classe = true;
 			contadorClasse++;
-		}	
+		}
+		return classe;
 	}
 
+	
+	private static void verificarMetodoDeus (String linhaCodigo, int limite) {
+		if(veriricarMetodos(linhaCodigo)) {
+			if(linhaCodigo.matches(".*(\\{)")) {
+				chavesAbertas++;
+				if(contadorMetodo >= limite) {
+					contadorMetodoDeus++;
+				}
+			}
+		} else if(linhaCodigo.matches("(\\})")) {
+			chavesAbertas--;
+		}
+	}
+	
+	private static void verificarClasseDeus (String linhaCodigo, int limite) {
+		if(veriricarClasses(linhaCodigo)) {
+			if(linhaCodigo.matches(".*(\\{)")) {
+				chavesAbertasClasse++;
+				if(contadorClasse >= limite) {
+					contadorClasseDeus++;
+				}
+			}
+			
+			
+		} else if(linhaCodigo.matches("(\\})")) {
+			chavesAbertas--;
+		}
+	}
 	
 }
