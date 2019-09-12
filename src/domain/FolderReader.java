@@ -18,16 +18,16 @@ import model.Mensal;
 import model.Metrica;
 
 public class FolderReader {
-	
+
 	private static List<Metrica> dadosAnalisados = new ArrayList<Metrica>();
 	private static List<Mensal> mensais = new ArrayList<Mensal>();
+
 
 	public static void main(String[] args) {
 		try {
 			new FolderReader();
 			JFileChooser jFileChooser = new JFileChooser();
 			jFileChooser.setCurrentDirectory(new java.io.File("."));
-//			jFileChooser.setCurrentDirectory(new java.io.File("C:\\Users\\kiens\\Desktop\\Dataset"));
 			jFileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 			int returnVal = jFileChooser.showOpenDialog(jFileChooser);
 			if(returnVal == JFileChooser.APPROVE_OPTION) {
@@ -46,7 +46,7 @@ public class FolderReader {
 	}
 
 private static void gerarMetricaGeral() {
-	Integer mes = 1;
+	Integer mes = 0;
 	Mensal mensal = new Mensal();
 	for (Metrica metrica : dadosAnalisados) {
 		if(mes == metrica.getPasta()) {
@@ -54,12 +54,19 @@ private static void gerarMetricaGeral() {
 			mensal.getMetricas().add(metrica);
 		} else {
 			mes = metrica.getPasta();
+			mensal = new Mensal(mes);
 			mensais.add(mensal);
-			mensal = new Mensal(metrica.getPasta());
 			mensal.getMetricas().add(metrica);
 		}
 	}
+	imprimirMesesMetrica(mensais);
 }
+
+	private static void imprimirMesesMetrica(List<Mensal> mensais) {
+		for (Mensal mensal: mensais) {
+			System.out.print(" " + mensal.getMes() + " ");
+		}
+	}
 
 	private static void listarPastas(File dir) {
 		File[] diretorios = dir.listFiles(new FileFilter() {
@@ -87,7 +94,6 @@ private static void gerarMetricaGeral() {
 			if (arquivo.getName().contains(".java")) {
 				System.out.println(arquivo.getName());
 				try {
-//					code.executarAnalise(file.getAbsolutePath().replaceAll("\\\\", "\\\\\\\\"));
 					dadosAnalisados.add(code.executarAnalise(arquivo.getAbsolutePath()));
 				} catch (FileNotFoundException e) {
 					System.out.println("Nao e possivel acessar a pasta por falta de privilegios.");

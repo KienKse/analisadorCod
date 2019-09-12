@@ -11,7 +11,10 @@ import java.util.regex.Pattern;
 
 import model.Metrica;
 public class Code {
-	
+
+	private static final String OPERATING_SYSTEM = System.getProperty("os.name").toLowerCase();
+
+
 	private static final String line = ".*(\\S)";
 	private static final String regexMethod = "(public|private|protected).*(static|void|String|int|long|float|boolean|double|char|Bitmap|BigDecimal|BigInteger|Double|Long|Float).*(\\()*(\\{)";
 	private static final String regexClass = "(public|private|protected).*(class).*(\\()*(\\{)";
@@ -26,7 +29,7 @@ public class Code {
 	private static Integer contadorMetodoDeus = 0;
 	private static Integer contadorClasseDeus = 0;
 
-	public Metrica executarAnalise(String caminho) throws FileNotFoundException, IOException {
+	public Metrica executarAnalise(String caminho) throws IOException {
 		BufferedReader br = new BufferedReader(new FileReader(caminho));
 		while (br.ready()) {
 			String linha = br.readLine();
@@ -38,11 +41,15 @@ public class Code {
 		imprimirMetricas();
 		
 		Integer mesArquivoT;
-		String arquivo;
+		String arquivo = null;
 		
 		mesArquivoT = capturarMesArquivoPeloCaminho(caminho);
-		arquivo = caminho.substring(caminho.lastIndexOf("\\")+1);
-//		arquivo = caminho.substring(caminho.lastIndexOf("/")+1);
+
+		if(OPERATING_SYSTEM.equalsIgnoreCase("linux")) {
+			arquivo = caminho.substring(caminho.lastIndexOf("/") + 1);
+		} else {
+//		arquivo = caminho.substring(caminho.lastIndexOf("\\")+1);
+		}
 			
 		Metrica metrica = new Metrica(mesArquivoT, arquivo, linhasCodigo, contadorClasse, contadorMetodo, contadorClasseDeus, contadorMetodoDeus);
 
@@ -55,8 +62,13 @@ public class Code {
 
 	private Integer capturarMesArquivoPeloCaminho(String caminho) {
 		Integer mes = null;
-		for (String string : caminho.split("\\\\")) {
-//		for (String string : caminho.split("/")) {
+		String[] path = null;
+		if(OPERATING_SYSTEM.equalsIgnoreCase("linux")) {
+			path = caminho.split("/");
+		} else {
+			path = caminho.split("\\\\");
+		}
+		for (String string : path) {
 	    	try {
 	    		mes = Integer.parseInt(string);
 	    	} catch (NumberFormatException e) {

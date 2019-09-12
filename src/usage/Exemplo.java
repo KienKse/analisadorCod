@@ -12,7 +12,7 @@ public class Exemplo {
 		/** metodo2 e metodo4 => contexto static */
 		metodo2("teste1");
 		metodo4(null, true, 1234567890L);
-		
+
 		/** metodo 1 e 3 => nonstatic*/
 	}
 	
