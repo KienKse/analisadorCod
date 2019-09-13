@@ -16,26 +16,28 @@ public class Code {
 
 
 	private static final String line = ".*(\\S)";
-	private static final String regexMethod = "(public|private|protected).*(static|void|String|int|long|float|boolean|double|char|Bitmap|BigDecimal|BigInteger|Double|Long|Float).*(\\()*(\\{)";
+	private static final String regexMethodBkp = "(public|private|protected).*(static|void|String|int|long|float|boolean|double|char|Bitmap|BigDecimal|BigInteger|Double|Long|Float).*(\\()*(\\{)";
+	private static final String regexMethod = "(public|private|protected).*(?!.*class|[A-Z].*).(static|void|String|int|long|float|boolean|double|char|Bitmap|BigDecimal|BigInteger|Double|Long|Float).*(\\()*(\\{)";
 	private static final String regexClass = "(public|private|protected).*(class).*(\\()*(\\{)";
 
-	private static Integer linhasCodigo = 0;
-	private static Integer contadorClasse = 0;
-	private static Integer contadorMetodo = 0;
-	
-	private static Integer chavesAbertas = 0;
-	private static Integer chavesAbertasClasse = 0;
-	
-	private static Integer contadorMetodoDeus = 0;
-	private static Integer contadorClasseDeus = 0;
+	private static int linhasCodigo = 0;
+	private static int contadorClasse = 0;
+	private static int contadorClasseDeus = 0;
+	private static int contadorMetodo = 0;
+	private static int contadorMetodoDeus = 0;
+
+	private static int chavesAbertasMetodo = 0;
+	private static int chavesAbertasClasse = 0;
+
+	private static int auxiliarClasse = 0;
+	private static int auxiliarMetodo = 0;
+
 
 	public Metrica executarAnalise(String caminho) throws IOException {
 		BufferedReader br = new BufferedReader(new FileReader(caminho));
 		while (br.ready()) {
 			String linha = br.readLine();
 			verificarLinha(linha);
-//			veriricarClasses(linha);
-//			veriricarMetodos(linha);
 		}
 		br.close();
 		imprimirMetricas();
@@ -48,7 +50,7 @@ public class Code {
 		if(OPERATING_SYSTEM.equalsIgnoreCase("linux")) {
 			arquivo = caminho.substring(caminho.lastIndexOf("/") + 1);
 		} else {
-//		arquivo = caminho.substring(caminho.lastIndexOf("\\")+1);
+			arquivo = caminho.substring(caminho.lastIndexOf("\\")+1);
 		}
 			
 		Metrica metrica = new Metrica(mesArquivoT, arquivo, linhasCodigo, contadorClasse, contadorMetodo, contadorClasseDeus, contadorMetodoDeus);
@@ -56,8 +58,6 @@ public class Code {
 		linhasCodigo = contadorClasse = contadorMetodo = contadorClasseDeus = contadorMetodoDeus = 0;
 		
 		return metrica;
-		//return Arrays.asList(mesArquivoT, arquivo, linhasCodigoT, contadorClasseT, contadorMetodoT, "\n");
-//		return Arrays.asList(mesArquivoT, linhasCodigoT, contadorClasseT, contadorMetodoT, "\n");
 	}
 
 	private Integer capturarMesArquivoPeloCaminho(String caminho) {
@@ -118,32 +118,55 @@ public class Code {
 		return classe;
 	}
 
-	
+
 	private static void verificarMetodoDeus (String linhaCodigo, int limite) {
-		if(veriricarMetodos(linhaCodigo)) {
-			if(linhaCodigo.matches(".*(\\{)")) {
-				chavesAbertas++;
-				if(contadorMetodo >= limite) {
-					contadorMetodoDeus++;
+		boolean linhaDeChamadaDoMetodo = veriricarMetodos(linhaCodigo);
+		if(linhaDeChamadaDoMetodo) {
+			chavesAbertasMetodo++;
+		}
+		if (chavesAbertasMetodo > 0) {
+			if(!linhaDeChamadaDoMetodo) {
+				if (linhaCodigo.matches("(.*\\})")) {
+					chavesAbertasMetodo--;
+				} else {
+					auxiliarMetodo++;
+					if (linhaCodigo.matches("(.*\\{)")) {
+						chavesAbertasMetodo++;
+					}
+				}
+				if (chavesAbertasMetodo != 0) {
+					if (auxiliarMetodo == limite) {
+						contadorMetodoDeus++;
+					}
+				} else {
+					auxiliarMetodo = chavesAbertasMetodo = 0;
 				}
 			}
-		} else if(linhaCodigo.matches("(\\})")) {
-			chavesAbertas--;
+		} else {
+			auxiliarMetodo = 0;
 		}
 	}
-	
+
 	private static void verificarClasseDeus (String linhaCodigo, int limite) {
-		if(veriricarClasses(linhaCodigo)) {
-			if(linhaCodigo.matches(".*(\\{)")) {
-				chavesAbertasClasse++;
-				if(contadorClasse >= limite) {
-					contadorClasseDeus++;
+		boolean linhaDeChamadaDeClasse = veriricarClasses(linhaCodigo);
+		if(linhaDeChamadaDeClasse) {
+			chavesAbertasClasse++;
+		}
+		if (chavesAbertasClasse > 0 && !linhaDeChamadaDeClasse) {
+			if (linhaCodigo.matches("(.*\\})")) {
+				chavesAbertasClasse--;
+			} else {
+				if (linhaCodigo.matches("(.*\\{)")) {
+					chavesAbertasClasse++;
+				} else {
+					auxiliarClasse++;
 				}
 			}
-			
-			
-		} else if(linhaCodigo.matches("(\\})")) {
-			chavesAbertas--;
+			if (auxiliarClasse == limite) {
+				contadorClasseDeus++;
+			}
+		} else {
+			auxiliarClasse = 0;
 		}
 	}
 	
