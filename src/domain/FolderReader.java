@@ -22,7 +22,6 @@ public class FolderReader {
 	private static List<Metrica> dadosAnalisados = new ArrayList<Metrica>();
 	private static List<Mensal> mensais = new ArrayList<Mensal>();
 
-
 	public static void main(String[] args) {
 		try {
 			new FolderReader();
@@ -35,13 +34,14 @@ public class FolderReader {
 //			    FolderReader.listFolders(new File(pathname));
 			    File pasta = jFileChooser.getSelectedFile();
 			    FolderReader.listarPastas(new File(pasta.getPath()));
-//			    ordenarMetricasPeloMes(dadosAnalisados);
-//			    gerarMetricaGeral();
-//			    gerarCSV();
-//			    gerarCSVCompleto();
+			    ordenarMetricasPeloMes(dadosAnalisados);
+			    gerarMetricaGeral();
+			    gerarCSV();
+			    gerarCSVCompleto();
 			}
 		} catch (NullPointerException e) {
-			JOptionPane.showMessageDialog(null, "Arquivo nao encontrado");
+//			JOptionPane.showMessageDialog(null, "Arquivo nao encontrado");
+			e.printStackTrace();
 		}
 	}
 
@@ -59,14 +59,9 @@ private static void gerarMetricaGeral() {
 			mensal.getMetricas().add(metrica);
 		}
 	}
-	imprimirMesesMetrica(mensais);
 }
 
-	private static void imprimirMesesMetrica(List<Mensal> mensais) {
-		for (Mensal mensal: mensais) {
-			System.out.print(" " + mensal.getMes() + " ");
-		}
-	}
+
 
 	private static void listarPastas(File dir) {
 		File[] diretorios = dir.listFiles(new FileFilter() {
@@ -94,7 +89,7 @@ private static void gerarMetricaGeral() {
 			if (arquivo.getName().contains(".java")) {
 				System.out.println(arquivo.getName());
 				try {
-					dadosAnalisados.add(code.executarAnalise(arquivo.getAbsolutePath()));
+					dadosAnalisados.add(code.executarAnalise(arquivo, arquivo.getAbsolutePath()));
 				} catch (FileNotFoundException e) {
 					System.out.println("Nao e possivel acessar a pasta por falta de privilegios.");
 //					e.printStackTrace();
@@ -106,17 +101,13 @@ private static void gerarMetricaGeral() {
 	}
 
 	private static void ordenarMetricasPeloMes(List<Metrica> metricas) {
-		Collections.sort(metricas, new Comparator<Metrica>() {
-		@Override
-		public int compare(Metrica objeto1, Metrica objeto2) {
-			return objeto1.getPasta().compareTo(objeto2.getPasta());
-		}
-		});
+		Collections.sort(metricas, Comparator.comparing(Metrica::getPasta));
 	}
 	
 	private static void gerarCSV() {
 		FileWriter escritor;
 		try {
+			/** MÊS,ARQUIVO,LOC,CLASSES,MÉTODOS */
 			escritor = extrairEscritor();
 			
 			for (Metrica metrica: dadosAnalisados) {
@@ -128,7 +119,7 @@ private static void gerarMetricaGeral() {
 						metrica.getMetodos()+"",
 						"\n"
 				));
-				escritor.append(String.join(";", dados));
+				escritor.append(String.join(",", dados));
 			}
 			escritor.flush();
 			escritor.close();
@@ -140,7 +131,7 @@ private static void gerarMetricaGeral() {
 	private static void gerarCSVCompleto() {
 		FileWriter escritor;
 		try {
-//			Mes;LOC;CLASSES;METODOS;CLASSE DEUS;METODO DEUS
+			/** Mes;LOC;CLASSES;METODOS;CLASSE DEUS;METODO DEUS */
 			escritor = extrairEscritorCompleto();
 			
 			for (Mensal mensal: mensais) {
@@ -153,7 +144,7 @@ private static void gerarMetricaGeral() {
 					mensal.getMetodosDeusTotal()+"",
 					"\n"
 				));
-				escritor.append(String.join(";", data));
+				escritor.append(String.join(",", data));
 			}
 			escritor.flush();
 			escritor.close();
@@ -165,8 +156,8 @@ private static void gerarMetricaGeral() {
 
 	private static FileWriter extrairEscritorCompleto() throws IOException {
 		FileWriter escritor;
-		escritor = new FileWriter("analisdorCodCompleto.csv");
-		escritor.append("Mes;LOC;CLASSES;CLASSES;CLASSE DEUS;METODO DEUS");
+		escritor = new FileWriter("analisador.csv");
+		escritor.append("MÊS,LOC,CLASSES,MÉTODOS,CLASSE DEUS,MÉTODO DEUS");
 		escritor.append("\n");
 		return escritor;
 	}
@@ -174,15 +165,7 @@ private static void gerarMetricaGeral() {
 	private static FileWriter extrairEscritor() throws IOException {
 		FileWriter escritor;
 		escritor = new FileWriter("analisdorCodComNome.csv");
-		escritor.append("Mes");
-		escritor.append(";");
-		escritor.append("Arquivo");
-		escritor.append(";");
-		escritor.append("LOC");
-		escritor.append(";");
-		escritor.append("CLASSES");
-		escritor.append(";");
-		escritor.append("METODOS");
+		escritor.append("MÊS,ARQUIVO,LOC,CLASSES,MÉTODOS");
 		escritor.append("\n");
 		return escritor;
 	}

@@ -1,8 +1,7 @@
 package model;
 
 public class Metrica {
-	
-	
+
 	private String arquivo;
 	private Integer pasta;
 	private Integer loc;

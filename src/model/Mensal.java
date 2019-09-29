@@ -23,7 +23,7 @@ public class Mensal {
 
 	public List<Metrica> getMetricas() {
 		if(metricas == null) {
-			metricas = new ArrayList<Metrica>();
+			metricas = new ArrayList<>();
 		}
 		return metricas;
 	}
