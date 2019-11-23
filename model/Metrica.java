@@ -6,6 +6,7 @@ public class Metrica {
 	private Integer pasta;
 	private Integer loc;
 	private Integer funcoes;
+	private Integer structs;
 	private Integer funcoesDeusas;
 	
 	public Metrica(String arquivo, Integer pasta) {
@@ -13,11 +14,12 @@ public class Metrica {
 		this.pasta = pasta;
 	}
 	
-	public Metrica(Integer pasta, String arquivo, int loc, int funcoes, int funcoesDeusas) {
+	public Metrica(Integer pasta, String arquivo, int loc, int funcoes, int structs, int funcoesDeusas) {
 		this.arquivo = arquivo;
 		this.pasta = pasta;
 		this.loc = loc;
 		this.funcoes = funcoes;
+		this.structs = structs;
 		this.funcoesDeusas = funcoesDeusas;
 	}
 	
@@ -68,8 +70,13 @@ public class Metrica {
 	public void setFuncoesDeusas(Integer funcoesDeusas) {
 		this.funcoesDeusas = funcoesDeusas;
 	}
-	
-	
-	
+
+	public Integer getStructs() {
+		return structs;
+	}
+
+	public void setStructs(Integer structs) {
+		this.structs = structs;
+	}
 	
 }

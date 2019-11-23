@@ -34,8 +34,8 @@ public class FolderReader {
 //			    FolderReader.listFolders(new File(pathname));
 			    File pasta = jFileChooser.getSelectedFile();
 			    FolderReader.listarPastas(new File(pasta.getPath()));
-			    ordenarMetricasPeloMes(dadosAnalisados);
-			    gerarMetricaGeral();
+//			    ordenarMetricasPeloMes(dadosAnalisados);
+//			    gerarMetricaGeral();
 //			    gerarCSV();
 //			    gerarCSVCompleto();
 			}
