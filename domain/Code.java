@@ -14,7 +14,7 @@ public class Code {
     private static final String OPERATING_SYSTEM = System.getProperty("os.name").toLowerCase();
     private static final String line = ".*(\\S)";
     private static final String regexFuncao2 = "(static|void|int|List|int|Integer|double|Double|String|string|char|long|Long|boolean|float).([A-z]|main).[(].([A-z]|void|.)\\n";
-    private static final String regexFuncao = "(static|void|int|List|int|Integer|double|Double|String|string|char|long|Long|boolean|float).([A-z]|main).*[(].*([A-z]|void|.)";
+    private static final String regexFuncao = "\\w+.*\\(";
 
     private static int linhasCodigo = 0;
     private static int contadorFuncao = 0;
@@ -22,30 +22,53 @@ public class Code {
     private static int contadorStruct = 0;
     
     private static boolean funcao = false;
+
+    private static boolean first = true;
+
+    private static boolean possivelEstruturaCodigoFonte = false;
     
     private static boolean verificacaoRegular = true;
 
     public Metrica executarAnalise(File arq, String caminho) throws IOException {
         BufferedReader br = new BufferedReader(new FileReader(caminho));
+        String linhaAnterior = "";
         while (br.ready()) {
+        	
             String linha = br.readLine();
-            verificacaoComentario(linha);
+//            verificacaoComentario(linha);
             verificarLinha(linha);
-            //TODO : FIXAR REGEX FUNCAO
+            
+            if(linha.contains("if(!(dc = DC_LockDc(hDC)))")) {
+            	System.out.println("");
+            }
+            
             if(funcao && linha.contains("{")) {
+            	System.out.println("                        adicionado: " + linha);
             	contadorFuncao++;
             	funcao = false;
             }
-            if(verificacaoRegular) {
-              funcao = verificarFuncoes(linha);
+            if(linha.contains(";")) {
+            	funcao = false;
             }
-            
+//            if(verificacaoRegular) {
+				if((!funcao || first) && !possivelEstruturaCodigoFonte) {
+					first = false;
+	            	funcao = verificarFuncoes(linha);
+	            	if(funcao) {
+	            		System.out.println(linha);
+	            	}
+            	}
+				if(linha.contains(")")) {
+					possivelEstruturaCodigoFonte = false;
+				}
+//            }
         }
+        first = true;
         br.close();
 
-        if(verificacaoRegular) {
+//        if(verificacaoRegular) {
             contadorFuncaoDeusa = verificarExistenciasDeEntidadesDeuses(arq, 127, true);
-        }
+//        }
 
         imprimirMetricas();
 
@@ -102,9 +125,32 @@ public class Code {
         Pattern padrao = Pattern.compile(regexFuncao);
         Matcher encontrador = padrao.matcher(linha);
         while (encontrador.find()) {
-        	return true;
+//        	if(!possuiEstruturaDeCodigoFonte(linha, "for") && !possuiEstruturaDeCodigoFonte(linha, "if")
+//        			&& !linha.contains(";") && !possuiEstruturaDeCodigoFonte(linha, "else")) {
+//            	return true;
+//        	}
+        	if(!possuiEstruturaDeCodigoFonte(linha)) {
+        		return true;
+        	}
         }
         return false;
+    }
+    
+    private static boolean possuiEstruturaDeCodigoFonte(String linhaCodigo) {
+//    	Pattern padrao = Pattern.compile("(if |for |;)");
+//        Matcher encontrador = padrao.matcher(linhaCodigo);
+//        while (encontrador.find()) {
+//        	if(!linhaCodigo.contains(")")) {
+//            	possivelEstruturaCodigoFonte = true;
+//        	}
+//        	return true;
+//        }
+//        return false;
+    	if(!linhaCodigo.contains(")")) {
+        	possivelEstruturaCodigoFonte = true;
+    	}
+    	return Pattern.compile("(if\\(|if |for\\(|for |;)").matcher(linhaCodigo).find();
+//    	return linhaCodigo.contains(validacao+"(") || linhaCodigo.contains(validacao+" (") || linhaCodigo.contains(validacao);
     }
 
     private static int verificarExistenciasDeEntidadesDeuses(File arquivo, int limite, boolean metodo) {
