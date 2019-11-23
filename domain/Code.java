@@ -31,13 +31,13 @@ public class Code {
             String linha = br.readLine();
             verificacaoComentario(linha);
             verificarLinha(linha);
-            //TODO : FIXAR REGEX FUNCAO
-            if(funcao && linha.contains("{")) {
-            	contadorFuncao++;
-            	funcao = false;
-            }
+            
             if(verificacaoRegular) {
               funcao = verificarFuncoes(linha);
+            }
+            
+            if(funcao == true) {
+            	contadorFuncao++;
             }
             
         }
@@ -87,8 +87,8 @@ public class Code {
     private void imprimirMetricas() {
         System.out.println("Metricas:\n"
                 + "LOC: " + linhasCodigo + "\n"
-                + "Numero de Funções: " + contadorFuncao + "\n"
-                + "Numero de Funções Deusas: " + contadorFuncaoDeusa + "\n"
+                + "Numero de FunÃ§Ãµes: " + contadorFuncao + "\n"
+                + "Numero de FunÃ§Ãµes Deusas: " + contadorFuncaoDeusa + "\n"
                 + "Numero de Struct: " + contadorStruct + "\n");
     }
 
@@ -99,7 +99,7 @@ public class Code {
     }
 
     private static boolean verificarFuncoes(String linha) {
-        Pattern padrao = Pattern.compile(regexFuncao);
+        Pattern padrao = Pattern.compile(regexFuncao2);
         Matcher encontrador = padrao.matcher(linha);
         while (encontrador.find()) {
         	return true;
